@@ -39,7 +39,7 @@ library:
 executables:
   rhythm-game-exe:
     main:                Main.hs
-    source-dirs:         app
+    source-dirs:         src
     ghc-options:
     - -threaded
     - -rtsopts
