@@ -33,6 +33,24 @@ APIs to import new music.
 3. Conduct unit tests for each component.
 4. Develop new features for stretch goals with unit tests if possible. Wrap up the whole project, prepare for demonstration.
 
+# Update
+This is the the update part.
+
+## Architecture
+
+## Challenges
+
+## Completeness and Future work
+So far, we have drawn the game UI and set up the basic framework of the whole program. The left side shows the scores you get, the right side shows the instructions and the main part is in the middle.
+<!-- gif here -->
+We think we can still achieve the basic functionality we envisioned earlier. The interface and the logic that the "bar" falls from above have been accomplished.
+
+Next step, we need to :
+
+1. Add a scoring function handler upon hit event.
+2. Add an ending page or notice when the music is finished.
+3. Make the bars fall down by the beat of the music.
+4. Other stretch goals.
 
 ## Reference
 https://hackage.haskell.org/package/rhythm-game-tutorial
