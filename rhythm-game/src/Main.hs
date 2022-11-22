@@ -1,4 +1,6 @@
-module Main where
+module Main
+  ( main
+  ) where
 
-main :: IO ()
-main = putStrLn "This is a rhythm game."
+import UI (main)
+
