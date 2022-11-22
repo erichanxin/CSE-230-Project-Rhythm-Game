@@ -63,6 +63,7 @@ handleEvent g (VtyEvent (V.EvKey (V.KChar 'd') [])) = continue $ hit KeyD g
 handleEvent g (VtyEvent (V.EvKey (V.KChar 'j') [])) = continue $ hit KeyJ g
 handleEvent g (VtyEvent (V.EvKey (V.KChar 'l') [])) = continue $ hit KeyL g
 handleEvent g (VtyEvent (V.EvKey (V.KChar 'q') [])) = halt g
+handleEvent g (VtyEvent (V.EvKey (V.KChar 'r') [])) = liftIO (initGame) >>= continue
 handleEvent g _                                     = continue g
 
 -- Drawing
@@ -84,6 +85,7 @@ drawInfo = withBorderStyle BS.unicodeBold
     , ("Hit Red ", "D")
     , ("Hit Green", "J")
     , ("Hit Yellow ", "L")
+    , ("Restart ", "r")
     , ("Quit", "q")
     ]
   where

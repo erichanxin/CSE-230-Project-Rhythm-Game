@@ -31,10 +31,10 @@ data Game = Game
 initGame :: IO Game
 initGame = do
   pure $
-    Game { _song = [[10, 20, 30, 40],
-                    [5, 20, 25, 30],
-                    [15, 40],
-                    [30, 50, 60, 90]]
+    Game { _song = [[40, 50, 60, 70],
+                    [35, 50, 55, 60],
+                    [45, 70],
+                    [60, 80, 90, 120]]
         , _lastHit = Empty
         , _score = 0
         , _done = False
