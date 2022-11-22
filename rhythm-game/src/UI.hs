@@ -12,7 +12,7 @@ import Brick
   , customMain, neverShowCursor, attrName, simpleMain
   , continue, halt
   , hLimit, vLimit, vBox, hBox
-  , padRight, padLeft, padTop, padAll, Padding(..)
+  , padRight, padLeft, padTop, padAll, padBottom, Padding(..)
   , withBorderStyle
   , str
   , attrMap, withAttr, emptyWidget, AttrName, on, fg
@@ -62,7 +62,24 @@ handleEvent g (AppEvent Tick)                       = continue $ step g
 -- Drawing
 drawUI :: Game -> [Widget Name]
 drawUI g =
-  [ C.center $ padRight (Pad 4) (drawStats g) <+> drawGrid g <+> padLeft (Pad 4) (drawLastHit g)]
+  [ C.vCenter $ hBox $ 
+  [padRight (Pad 4) (drawStats g),
+  drawGrid g,
+  padLeft (Pad 4) $ vBox $ [(drawLastHit g), padTop (Pad 2) $ drawInfo ]
+  ]]
+
+
+drawInfo :: Widget Name
+drawInfo = withBorderStyle BS.unicodeBold
+  $ hLimit 20
+  $ B.borderWithLabel (str "Commands")
+  $ vBox $ map (uncurry drawKey)
+  $ [ ("Hit", "Space")
+    , ("Quit", "q or esc")
+    ]
+  where
+    drawKey act key = (padBottom (Pad 1) $ padRight Max $ padLeft (Pad 1) $ str act)
+                      <+> (padBottom (Pad 1) $ padLeft Max $ padRight (Pad 1) $ str key)
 
 drawLastHit :: Game -> Widget Name
 drawLastHit g = withBorderStyle BS.unicodeBold
@@ -128,3 +145,4 @@ thirdAttr = attrName "thirdAttr"
 fourthAttr = attrName "fourthAttr"
 emptyAttr = attrName "emptyAttr"
 bottomAttr = attrName "bottomAttr"
+
