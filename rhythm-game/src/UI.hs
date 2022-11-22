@@ -71,11 +71,14 @@ drawUI g =
 
 drawInfo :: Widget Name
 drawInfo = withBorderStyle BS.unicodeBold
-  $ hLimit 20
-  $ B.borderWithLabel (str "Commands")
+  $ hLimit 25
+  $ B.borderWithLabel (str " Commands ")
   $ vBox $ map (uncurry drawKey)
-  $ [ ("Hit", "Space")
-    , ("Quit", "q or esc")
+  $ [ ("Hit Blue ", "A")
+    , ("Hit Red ", "D")
+    , ("Hit Green", "J")
+    , ("Hit Yellow ", "L")
+    , ("Quit", "q")
     ]
   where
     drawKey act key = (padBottom (Pad 1) $ padRight Max $ padLeft (Pad 1) $ str act)
@@ -83,8 +86,8 @@ drawInfo = withBorderStyle BS.unicodeBold
 
 drawLastHit :: Game -> Widget Name
 drawLastHit g = withBorderStyle BS.unicodeBold
-  $ hLimit 20
-  $ B.borderWithLabel (str "Last Hit")
+  $ hLimit 25
+  $ B.borderWithLabel (str " Last Hit ")
   $ C.hCenter
   $ padAll 1
   $ str $ show (_lastHit g)
@@ -95,14 +98,14 @@ drawStats g = hLimit 11
 
 drawScore :: Int -> Widget Name
 drawScore n = withBorderStyle BS.unicodeBold
-  $ B.borderWithLabel (str "Score")
+  $ B.borderWithLabel (str " Score ")
   $ C.hCenter
   $ padAll 1
   $ str $ show n
 
 drawGrid :: Game -> Widget Name
 drawGrid g = withBorderStyle BS.unicodeBold
-  $ B.borderWithLabel (str "Rhythm")
+  $ B.borderWithLabel (str " Rhythm ")
   $ vBox rows
   where
     rows         = [hBox $ cellsInRow r | r <- [39, 38..0]]
