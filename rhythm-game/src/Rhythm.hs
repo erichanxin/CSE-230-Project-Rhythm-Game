@@ -31,14 +31,15 @@ data Game = Game
 initGame :: IO Game
 initGame = do
   pure $
-    Game { _song = [[40, 50, 60, 70],
-                    [35, 50, 55, 60],
-                    [45, 70],
-                    [60, 80, 90, 120]]
+    Game { _song = [[40, 75, 80, 120],
+                    [35, 45, 70, 90, 100],
+                    [50, 65, 100],
+                    [55, 60, 80, 110]]
         , _lastHit = Empty
         , _score = 0
         , _done = False
         }
+
 
 fall :: [[Int]] -> [[Int]]
 fall = map (filter (>0) . map (\h -> h-1))
@@ -47,7 +48,7 @@ step :: Game -> Game
 step g = Game
     { _song       = fall (_song g)
     , _score      = _score g
-    , _lastHit    = _lastHit g
+    , _lastHit    = if 1 `elem` concat (_song g) then Miss else _lastHit g
     , _done       = _done g
     } 
 

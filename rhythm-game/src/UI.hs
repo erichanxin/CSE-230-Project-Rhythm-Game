@@ -72,7 +72,7 @@ drawUI g =
   [ C.vCenter $ hBox $ 
   [padRight (Pad 4) (drawStats g),
   drawGrid g,
-  padLeft (Pad 4) $ vBox $ [(drawLastHit g), padTop (Pad 2) $ drawInfo ]
+  padLeft (Pad 4) $ vBox $ [drawInfo, padTop (Pad 2) $ drawLastHit g ]
   ]]
 
 
