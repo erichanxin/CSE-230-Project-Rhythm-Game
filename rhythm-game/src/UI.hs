@@ -31,7 +31,6 @@ data Tick = Tick
 
 data Col = FirstCol | SecondCol | ThirdCol | FourthCol | EmptyCol | Bottom
 
-type Name = ()
 
 -- define App
 app :: App Game Tick Name
@@ -62,7 +61,7 @@ handleEvent g (VtyEvent (V.EvKey (V.KChar 'a') [])) = continue $ hit KeyA g
 handleEvent g (VtyEvent (V.EvKey (V.KChar 'd') [])) = continue $ hit KeyD g
 handleEvent g (VtyEvent (V.EvKey (V.KChar 'j') [])) = continue $ hit KeyJ g
 handleEvent g (VtyEvent (V.EvKey (V.KChar 'l') [])) = continue $ hit KeyL g
-handleEvent g (VtyEvent (V.EvKey (V.KChar 'q') [])) = halt g
+handleEvent g (VtyEvent (V.EvKey (V.KChar 'q') [])) = quitGame g
 handleEvent g (VtyEvent (V.EvKey (V.KChar 'r') [])) = liftIO (initGame) >>= continue
 handleEvent g _                                     = continue g
 

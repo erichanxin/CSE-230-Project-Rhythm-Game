@@ -25,6 +25,9 @@ dependencies:
 - vty
 - containers
 - lens
+- process
+- unix
+- filepath
 
 ghc-options:
 - -Wall
