@@ -11,15 +11,15 @@ import Brick
   , (<+>)
   )
 import Control.Lens hiding ((<|), (|>), (:>), (:<), Empty)
-import System.Process (ProcessHandle, StdStream(CreatePipe),
-  CreateProcess(std_err), createProcess, proc, terminateProcess, runCommand)
+import System.Process (ProcessHandle, StdStream(CreatePipe,UseHandle),
+  CreateProcess(std_err, std_out), createProcess, proc, terminateProcess)
 import System.Process.Internals (ProcessHandle__(OpenHandle, ClosedHandle),
   withProcessHandle)
 import System.FilePath ((</>))
 import Control.Monad.IO.Class (liftIO)
 import System.Info
 import System.Directory
-
+import System.IO
 --- Game definitions: --
 
 type Name = ()
@@ -53,7 +53,7 @@ data Game = Game
 -- functions
 initGame :: IO Game
 initGame = do
-  initMusic <- playMusic ("assets" </> "temp_music.mp3")
+  initMusic <- playMusic ("./assets" </> "temp_music.mp3")
   pure $
     Game { _song = [[40, 75, 80, 120],
                     [35, 45, 70, 90, 100],
@@ -93,13 +93,22 @@ hit k g = do
       }
 
 playMusic :: FilePath -> IO ProcessHandle
-playMusic path = do
-  let playCmd = case os of "darwin" -> "afplay " ++ path
-                           "linux" -> "play " ++ path ++ " > /dev/null 2>&1"
-                           "mingw32" -> "start" ++ path
-  -- Debug Info
-  -- print cmd
-  runCommand playCmd
+playMusic path = withFile "/dev/null" WriteMode $ \hd_ -> do
+  case os of "darwin" ->  do (_, _, _, processHandle) <- createProcess (proc "mpg321" [path]) {
+        std_out = UseHandle hd_
+        ,std_err = UseHandle hd_
+      }                      
+                             return processHandle
+             "linux" ->   do (_, _, _, processHandle) <- createProcess (proc "mpg321" [path]) {
+        std_out = UseHandle hd_
+        ,std_err = UseHandle hd_
+      }
+                             return processHandle
+             "mingw32" -> do (_, _, _, processHandle) <- createProcess (proc "start" [path]) {
+        std_out = UseHandle hd_
+        ,std_err = UseHandle hd_
+      }
+                             return processHandle
 
 stopMusic :: ProcessHandle -> IO ()
 stopMusic = terminateProcess
