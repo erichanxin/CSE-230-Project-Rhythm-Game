@@ -62,7 +62,7 @@ handleEvent g (VtyEvent (V.EvKey (V.KChar 'd') [])) = continue $ hit KeyD g
 handleEvent g (VtyEvent (V.EvKey (V.KChar 'j') [])) = continue $ hit KeyJ g
 handleEvent g (VtyEvent (V.EvKey (V.KChar 'l') [])) = continue $ hit KeyL g
 handleEvent g (VtyEvent (V.EvKey (V.KChar 'q') [])) = quitGame g
-handleEvent g (VtyEvent (V.EvKey (V.KChar 'r') [])) = liftIO (initGame) >>= continue
+handleEvent g (VtyEvent (V.EvKey (V.KChar 'r') [])) = restartGame g
 handleEvent g _                                     = continue g
 
 -- Drawing

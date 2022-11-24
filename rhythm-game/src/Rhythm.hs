@@ -12,13 +12,13 @@ import Brick
   )
 import Control.Lens hiding ((<|), (|>), (:>), (:<), Empty)
 import System.Process (ProcessHandle, StdStream(CreatePipe),
-  CreateProcess(std_err), createProcess, proc, terminateProcess)
-import System.Posix (ProcessID)
-import System.Posix.Signals (signalProcess)
+  CreateProcess(std_err), createProcess, proc, terminateProcess, runCommand)
 import System.Process.Internals (ProcessHandle__(OpenHandle, ClosedHandle),
   withProcessHandle)
 import System.FilePath ((</>))
 import Control.Monad.IO.Class (liftIO)
+import System.Info
+import System.Directory
 
 --- Game definitions: --
 
@@ -53,7 +53,7 @@ data Game = Game
 -- functions
 initGame :: IO Game
 initGame = do
-  initMusic <- playMusic ("../assets" </> "temp_music.mp3")
+  initMusic <- playMusic ("assets" </> "temp_music.mp3")
   pure $
     Game { _song = [[40, 75, 80, 120],
                     [35, 45, 70, 90, 100],
@@ -94,11 +94,13 @@ hit k g = do
 
 playMusic :: FilePath -> IO ProcessHandle
 playMusic path = do
-  (_, _, _, processHandle) <-
-    createProcess (proc "afplay" [path]) {
-        std_err = CreatePipe
-      }
-  return processHandle
+  let playCmd = case os of "darwin" -> "afplay"
+                           "linux" -> "play"
+                           "mingw32" -> "start"
+  let cmd = playCmd ++ " " ++ path
+  -- Debug Info
+  -- print cmd
+  runCommand cmd
 
 stopMusic :: ProcessHandle -> IO ()
 stopMusic = terminateProcess
@@ -107,3 +109,8 @@ quitGame :: Game -> EventM Name (Next Game)
 quitGame g = do
   liftIO $ stopMusic (_musicHandle g)
   halt g
+
+restartGame :: Game -> EventM Name (Next Game)
+restartGame g = do
+  liftIO $ stopMusic (_musicHandle g)
+  liftIO (initGame) >>= continue

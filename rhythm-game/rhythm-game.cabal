@@ -37,10 +37,10 @@ library
       base >=4.7 && <5
     , brick
     , containers
+    , directory
     , filepath
     , lens
     , process
-    , unix
     , vty
   default-language: Haskell2010
 
@@ -57,11 +57,11 @@ executable rhythm-game-exe
       base >=4.7 && <5
     , brick
     , containers
+    , directory
     , filepath
     , lens
     , process
     , rhythm-game
-    , unix
     , vty
   default-language: Haskell2010
 
@@ -77,10 +77,10 @@ test-suite rhythm-game-test
       base >=4.7 && <5
     , brick
     , containers
+    , directory
     , filepath
     , lens
     , process
     , rhythm-game
-    , unix
     , vty
   default-language: Haskell2010

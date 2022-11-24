@@ -26,8 +26,8 @@ dependencies:
 - containers
 - lens
 - process
-- unix
 - filepath
+- directory
 
 ghc-options:
 - -Wall
