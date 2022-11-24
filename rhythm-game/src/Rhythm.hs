@@ -94,13 +94,12 @@ hit k g = do
 
 playMusic :: FilePath -> IO ProcessHandle
 playMusic path = do
-  let playCmd = case os of "darwin" -> "afplay"
-                           "linux" -> "play"
-                           "mingw32" -> "start"
-  let cmd = playCmd ++ " " ++ path
+  let playCmd = case os of "darwin" -> "afplay " ++ path
+                           "linux" -> "play " ++ path ++ " > /dev/null 2>&1"
+                           "mingw32" -> "start" ++ path
   -- Debug Info
   -- print cmd
-  runCommand cmd
+  runCommand playCmd
 
 stopMusic :: ProcessHandle -> IO ()
 stopMusic = terminateProcess
