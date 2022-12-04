@@ -22,12 +22,13 @@ ui =
   padLeft (Pad 19)
     $ padRight (Pad 21)
     $ C.center
-    $ hLimit 25
+    $ hLimit 50
     $ withBorderStyle BS.unicodeBold
     $ B.borderWithLabel (str " Choose Mode ")
     $ padTop (Pad 1)
     $ vBox $ map (uncurry drawKey)
     $ [ ("Game Mode", "1")
+        , ("Developer Mode", "2")
         , ("Quit", "q")
         ]
     where
@@ -39,6 +40,7 @@ handleEvent n (VtyEvent (V.EvKey V.KEsc        _)) = halt n
 handleEvent n (VtyEvent (V.EvKey (V.KChar 'q') _)) = halt n
 handleEvent n (VtyEvent (V.EvKey (V.KChar 'Q') _)) = halt n
 handleEvent n (VtyEvent (V.EvKey (V.KChar '1') [])) = halt $ Just 1
+handleEvent n (VtyEvent (V.EvKey (V.KChar '2') [])) = halt $ Just 2
 handleEvent n _ = continue n
 
 chooseMode :: IO Int

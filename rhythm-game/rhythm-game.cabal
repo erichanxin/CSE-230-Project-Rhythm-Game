@@ -26,6 +26,8 @@ source-repository head
 library
   exposed-modules:
       ChooseMode
+      DeveloperMode
+      DeveloperUI
       Main
       Rhythm
       UI
@@ -49,6 +51,8 @@ executable rhythm-game-exe
   main-is: Main.hs
   other-modules:
       ChooseMode
+      DeveloperMode
+      DeveloperUI
       Rhythm
       UI
       Paths_rhythm_game
