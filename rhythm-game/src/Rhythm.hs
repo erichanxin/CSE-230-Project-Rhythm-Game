@@ -20,6 +20,7 @@ import Control.Monad.IO.Class (liftIO)
 import System.Info
 import System.Directory
 import System.IO
+import System.FilePath.Windows (FilePath)
 --- Game definitions: --
 
 type Name = ()
@@ -54,17 +55,20 @@ data Game = Game
 initGame :: IO Game
 initGame = do
   initMusic <- playMusic ("./assets" </> "temp_music.mp3")
+  notes <- readNotes "noteLists.txt"
   pure $
-    Game { _song = [[40, 75, 80, 120],
-                    [35, 45, 70, 90, 100],
-                    [50, 65, 100],
-                    [55, 60, 80, 110]]
+    Game { _song = notes
         , _lastHit = Empty
         , _score = 0
         , _done = False
         , _musicHandle = initMusic
         }
 
+
+readNotes :: FilePath -> IO [[Int]]
+readNotes path = do
+  noteString <- readFile path 
+  return $ read noteString
 
 fall :: [[Int]] -> [[Int]]
 fall = map (filter (>0) . map (\h -> h-1))
