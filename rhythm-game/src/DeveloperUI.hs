@@ -29,9 +29,6 @@ import qualified Data.Sequence as S
 -- marks passing of time
 data Tick = Tick
 
-data Col = FirstCol | SecondCol | ThirdCol | FourthCol | EmptyCol | Bottom
-
-
 -- define App
 app :: App Developer Tick Name
 app = App { appDraw = drawUI
@@ -100,6 +97,7 @@ drawInfo = withBorderStyle BS.unicodeBold
     , ("Hit Green", "J")
     , ("Hit Yellow ", "L")
     , ("Restart ", "r")
+    , ("Write ", "w")
     , ("Quit", "q")
     ]
   where

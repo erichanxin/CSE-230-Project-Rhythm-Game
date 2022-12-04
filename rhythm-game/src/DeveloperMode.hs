@@ -21,16 +21,8 @@ import System.Info
 import System.Directory
 import System.IO
 import Control.Monad (when)
---- Game definitions: --
-
+--- Developer definitions: --
 type Name = ()
-
-data Note = N { height :: Int }
-  deriving (Eq, Ord)
-
-data HitState
-    = Perfect | Good | Miss | Empty
-    deriving (Show, Eq, Ord)
 
 data HitKey
     = KeyA | KeyD | KeyJ | KeyL
