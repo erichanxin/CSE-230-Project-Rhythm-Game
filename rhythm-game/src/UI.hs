@@ -43,8 +43,8 @@ app = App { appDraw = drawUI
 
 -- color attributes:
 
-main :: IO ()
-main = do
+mainGame :: IO ()
+mainGame = do
   chan <- newBChan 10
   forkIO $ forever $ do
     writeBChan chan Tick
