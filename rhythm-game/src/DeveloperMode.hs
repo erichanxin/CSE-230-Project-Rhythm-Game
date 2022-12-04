@@ -101,13 +101,14 @@ playMusic path = withFile "/dev/null" WriteMode $ \hd_ -> do
 stopMusic :: ProcessHandle -> IO ()
 stopMusic = terminateProcess
 
-writeToFile :: Developer -> IO ()
-writeToFile d = writeFile "noteLists.txt" (show $ _song d)
+writeToFile :: Developer -> EventM Name (Next Developer)
+writeToFile d = do
+  liftIO $ writeFile "noteLists.txt" (show $ _song d)
+  halt d
 
 quitDeveloper :: Developer -> EventM Name (Next Developer)
 quitDeveloper d = do
   liftIO $ stopMusic (_musicHandle d)
-  liftIO $ writeToFile d
   halt d
 
 restartDeveloper :: Developer -> EventM Name (Next Developer)

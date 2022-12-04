@@ -61,6 +61,7 @@ handleEvent d (VtyEvent (V.EvKey (V.KChar 'a') [])) = continue $ hit KeyA d
 handleEvent d (VtyEvent (V.EvKey (V.KChar 'd') [])) = continue $ hit KeyD d
 handleEvent d (VtyEvent (V.EvKey (V.KChar 'j') [])) = continue $ hit KeyJ d
 handleEvent d (VtyEvent (V.EvKey (V.KChar 'l') [])) = continue $ hit KeyL d
+handleEvent d (VtyEvent (V.EvKey (V.KChar 'w') [])) = writeToFile d
 handleEvent d (VtyEvent (V.EvKey (V.KChar 'r') [])) = restartDeveloper d
 handleEvent d (VtyEvent (V.EvKey (V.KChar 'q') [])) = quitDeveloper d
 handleEvent d _                                     = continue d
