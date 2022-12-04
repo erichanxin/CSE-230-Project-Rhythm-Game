@@ -68,11 +68,22 @@ handleEvent g _                                     = continue g
 -- Drawing
 drawUI :: Game -> [Widget Name]
 drawUI g =
-  [ C.vCenter $ hBox $ 
-  [padRight (Pad 4) (drawStats g),
-  drawGrid g,
-  padLeft (Pad 4) $ vBox $ [drawInfo, padTop (Pad 2) $ drawLastHit g ]
-  ]]
+  if (_done g) then [C.vCenter $ C.hCenter $ drawGameOver g] else (
+    [ C.vCenter $ hBox $ 
+    [padRight (Pad 4) (drawStats g),
+    drawGrid g,
+    padLeft (Pad 4) $ vBox $ [drawInfo, padTop (Pad 2) $ drawLastHit g ]
+    ]]
+  )
+
+drawGameOver :: Game -> Widget Name
+drawGameOver g = withBorderStyle BS.unicodeBold
+  $ hLimit 100
+  $ B.borderWithLabel (str " Game over ")
+  $ vBox $ [str "     Game over     "
+  , str ("     Final score: "++ (show $ (_score g)))
+  , str ("     Press Q to quit or press R to restrart.     ")
+  ]
 
 
 drawInfo :: Widget Name

@@ -78,7 +78,7 @@ step g = Game
     { _song       = fall (_song g)
     , _score      = _score g
     , _lastHit    = if 1 `elem` concat (_song g) then Miss else _lastHit g
-    , _done       = _done g
+    , _done       = null ((_song g)!!0) && null ((_song g)!!1) && null ((_song g)!!2) && null ((_song g)!!3)
     , _musicHandle = _musicHandle g
     } 
 
