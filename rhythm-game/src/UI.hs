@@ -82,6 +82,7 @@ drawGameOver g = withBorderStyle BS.unicodeBold
   $ B.borderWithLabel (str " Game over ")
   $ vBox $ [str "     Game over     "
   , str ("     Final score: "++ (show $ (_score g)))
+  , str ("     Maximum combo: "++ (show $ (_maxCombo g)))
   , str ("     Press Q to go back to main page or press R to restrart.     ")
   ]
 
@@ -112,11 +113,18 @@ drawLastHit g = withBorderStyle BS.unicodeBold
 
 drawStats :: Game -> Widget Name
 drawStats g = hLimit 11
-  $ vBox [ drawScore (_score g)]
+  $ vBox [ drawScore (_score g), drawCombo (_combo g)]
 
 drawScore :: Int -> Widget Name
 drawScore n = withBorderStyle BS.unicodeBold
   $ B.borderWithLabel (str " Score ")
+  $ C.hCenter
+  $ padAll 1
+  $ str $ show n
+
+drawCombo :: Int -> Widget Name
+drawCombo n = withBorderStyle BS.unicodeBold
+  $ B.borderWithLabel (str " Combo ")
   $ C.hCenter
   $ padAll 1
   $ str $ show n

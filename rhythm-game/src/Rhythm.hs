@@ -49,6 +49,8 @@ data Game = Game
   , _lastHit    :: HitState
   , _done       :: Bool
   , _musicHandle :: ProcessHandle
+  , _combo      :: Int
+  , _maxCombo   :: Int
   } 
 
 -- functions
@@ -62,6 +64,8 @@ initGame = do
         , _score = 0
         , _done = False
         , _musicHandle = initMusic
+        , _combo = 0
+        , _maxCombo = 0
         }
 
 
@@ -74,12 +78,16 @@ fall :: [[Int]] -> [[Int]]
 fall = map (filter (>0) . map (\h -> h-1))
 
 step :: Game -> Game
-step g = Game
+step g = do
+  let newHit = if 1 `elem` concat (_song g) then Miss else _lastHit g
+  Game
     { _song       = fall (_song g)
     , _score      = _score g
-    , _lastHit    = if 1 `elem` concat (_song g) then Miss else _lastHit g
+    , _lastHit    = newHit
     , _done       = null ((_song g)!!0) && null ((_song g)!!1) && null ((_song g)!!2) && null ((_song g)!!3)
     , _musicHandle = _musicHandle g
+    , _combo      = if newHit == Miss then 0 else _combo g
+    , _maxCombo   = _maxCombo g
     } 
 
 hit :: HitKey -> Game -> Game
@@ -88,12 +96,16 @@ hit k g = do
   let s = _song g
   if length (s!!n) == 0 then g else do
     let height = head (s!!n)
+    let newHit = if height == 1 then Perfect else (if height > 3 then Miss else Good)
+    let newCombo = if newHit == Miss then 0 else (_combo g + 1)
     Game
       { _song       = fall (s & element n .~ tail (s!!n))
-      , _score      = _score g + (if height == 1 then 5 else (if height > 3  then 0 else 3))
-      , _lastHit    = if height == 1 then Perfect else (if height > 3 then Miss else Good)
+      , _score      = _score g + (if newHit == Perfect then 5 else (if newHit == Miss then 0 else 3))
+      , _lastHit    = newHit
       , _done       = _done g
       , _musicHandle = _musicHandle g
+      , _combo      = newCombo
+      , _maxCombo   = max newCombo (_maxCombo g)
       }
 
 playMusic :: FilePath -> IO ProcessHandle
