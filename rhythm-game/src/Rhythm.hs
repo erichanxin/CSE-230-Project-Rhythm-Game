@@ -100,7 +100,7 @@ hit k g = do
     let newCombo = if newHit == Miss then 0 else (_combo g + 1)
     Game
       { _song       = if newHit == Miss then s else fall (s & element n .~ tail (s!!n))
-      , _score      = _score g + (if newHit == Perfect then 5 else (if newHit == Miss then 0 else 3))
+      , _score      = _score g + ((newCombo `div` 5)+1)*(if newHit == Perfect then 5 else (if newHit == Miss then 0 else 3))
       , _lastHit    = newHit
       , _done       = _done g
       , _musicHandle = _musicHandle g
