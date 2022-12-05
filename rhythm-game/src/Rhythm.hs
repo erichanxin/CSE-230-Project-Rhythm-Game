@@ -25,8 +25,8 @@ import System.FilePath.Windows (FilePath)
 
 type Name = ()
 
-data Note = N { height :: Int }
-  deriving (Eq, Ord)
+data Event
+    = StepEvent | HitEvent 
 
 data HitState
     = Perfect | Good | Miss | Empty
@@ -53,7 +53,9 @@ data Game = Game
   , _maxCombo   :: Int
   } 
 
--- functions
+-- Functions
+
+-- initialize the game
 initGame :: IO Game
 initGame = do
   initMusic <- playMusic ("./assets" </> "temp_music.mp3")
@@ -68,15 +70,28 @@ initGame = do
         , _maxCombo = 0
         }
 
-
+-- load notes from noteLists.txt
 readNotes :: FilePath -> IO [[Int]]
 readNotes path = do
   noteString <- readFile path 
   return $ read noteString
 
+-- check whether the song is finished
+isEmptySong :: [[Int]] -> Bool
+isEmptySong [[], [], [], []] = True
+isEmptySong _ = False
+
+-- update the number of combos according to the last hit
+comboCounter :: Int -> Event -> HitState -> Int
+comboCounter _ _ Miss = 0
+comboCounter combo StepEvent _    = combo
+comboCounter combo HitEvent  _    = combo+1
+
+-- all notes fall down one unit
 fall :: [[Int]] -> [[Int]]
 fall = map (filter (>0) . map (\h -> h-1))
 
+-- step function
 step :: Game -> Game
 step g = do
   let newHit = if 1 `elem` concat (_song g) then Miss else _lastHit g
@@ -84,23 +99,30 @@ step g = do
     { _song       = fall (_song g)
     , _score      = _score g
     , _lastHit    = newHit
-    , _done       = null ((_song g)!!0) && null ((_song g)!!1) && null ((_song g)!!2) && null ((_song g)!!3)
+    , _done       = isEmptySong (_song g)
     , _musicHandle = _musicHandle g
-    , _combo      = if newHit == Miss then 0 else _combo g
+    , _combo      = comboCounter (_combo g) StepEvent newHit
     , _maxCombo   = _maxCombo g
     } 
 
+-- evaluate hit according to the height of the corresponding note
+evaluateHit :: Int -> (HitState, Int)
+evaluateHit h
+  | h == 1      = (Perfect, 5)
+  | h > 5       = (Miss, 0)
+  | otherwise   = (Good, 3)
+
+-- hit function
 hit :: HitKey -> Game -> Game
 hit k g = do
   let n = keyToCol k
   let s = _song g
   if length (s!!n) == 0 then g else do
-    let height = head (s!!n)
-    let newHit = if height == 1 then Perfect else (if height > 5 then Miss else Good)
-    let newCombo = if newHit == Miss then 0 else (_combo g + 1)
+    let (newHit, hitScore) = evaluateHit (head (s!!n))
+    let newCombo = comboCounter (_combo g) HitEvent newHit
     Game
       { _song       = if newHit == Miss then s else fall (s & element n .~ tail (s!!n))
-      , _score      = _score g + ((newCombo `div` 5)+1)*(if newHit == Perfect then 5 else (if newHit == Miss then 0 else 3))
+      , _score      = _score g + ((newCombo `div` 5)+1)*hitScore
       , _lastHit    = newHit
       , _done       = _done g
       , _musicHandle = _musicHandle g
