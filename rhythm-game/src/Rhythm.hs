@@ -27,6 +27,7 @@ type Name = ()
 
 data Event
     = StepEvent | HitEvent 
+    deriving (Show, Eq, Ord)
 
 data HitState
     = Perfect | Good | Miss | Empty

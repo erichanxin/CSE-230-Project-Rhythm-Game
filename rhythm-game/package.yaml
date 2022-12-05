@@ -28,6 +28,7 @@ dependencies:
 - process
 - filepath
 - directory
+- QuickCheck
 
 ghc-options:
 - -Wall
