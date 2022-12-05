@@ -95,6 +95,7 @@ stopMusic = terminateProcess
 
 writeToFile :: Developer -> EventM Name (Next Developer)
 writeToFile d = do
+  liftIO $ stopMusic (_musicHandle d)
   liftIO $ writeFile "noteLists.txt" (show $ _song d)
   halt d
 
