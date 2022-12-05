@@ -96,10 +96,10 @@ hit k g = do
   let s = _song g
   if length (s!!n) == 0 then g else do
     let height = head (s!!n)
-    let newHit = if height == 1 then Perfect else (if height > 3 then Miss else Good)
+    let newHit = if height == 1 then Perfect else (if height > 5 then Miss else Good)
     let newCombo = if newHit == Miss then 0 else (_combo g + 1)
     Game
-      { _song       = fall (s & element n .~ tail (s!!n))
+      { _song       = if newHit == Miss then s else fall (s & element n .~ tail (s!!n))
       , _score      = _score g + (if newHit == Perfect then 5 else (if newHit == Miss then 0 else 3))
       , _lastHit    = newHit
       , _done       = _done g
