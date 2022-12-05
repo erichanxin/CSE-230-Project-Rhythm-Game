@@ -82,7 +82,7 @@ drawGameOver g = withBorderStyle BS.unicodeBold
   $ B.borderWithLabel (str " Game over ")
   $ vBox $ [str "     Game over     "
   , str ("     Final score: "++ (show $ (_score g)))
-  , str ("     Press Q to quit or press R to restrart.     ")
+  , str ("     Press Q to go back to main page or press R to restrart.     ")
   ]
 
 

@@ -7,8 +7,14 @@ import DeveloperUI (mainDeveloper)
 import ChooseMode (chooseMode)
 import Control.Monad (void,when)
 
+repeatNTimes 0 _ = return ()
+repeatNTimes n action =
+ do
+  action
+  repeatNTimes (n-1) action
+
 main :: IO ()
-main = do
-  mode <- chooseMode
-  Control.Monad.when (mode == 1) $ void mainGame
-  Control.Monad.when (mode == 2) $ void mainDeveloper
+main = repeatNTimes 10 (do
+    mode <- chooseMode
+    Control.Monad.when (mode == 1) $ void mainGame
+    Control.Monad.when (mode == 2) $ void mainDeveloper)
