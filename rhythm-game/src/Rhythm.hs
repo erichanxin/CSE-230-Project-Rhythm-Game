@@ -96,19 +96,24 @@ fall :: [[Int]] -> [[Int]]
 fall = map (filter (>0) . map (\h -> h-1))
 
 -- step function
-step :: Game -> Game
-step g = do
-  let newHit = if 1 `elem` concat (_song g) then Miss else _lastHit g
-  Game
-    { _song       = fall (_song g)
-    , _score      = _score g
-    , _lastHit    = newHit
-    , _done       = isEmptySong (_song g)
-    , _musicHandle = _musicHandle g
-    , _combo      = comboCounter (_combo g) StepEvent newHit
-    , _maxCombo   = _maxCombo g
-    , _lastHitCol = _lastHitCol g
-    } 
+step :: Game -> EventM Name (Next Game)
+step g =
+  if _done g then do
+    liftIO $ stopMusic (_musicHandle g)
+    continue g
+  else do
+    let newHit = if 1 `elem` concat (_song g) then Miss else _lastHit g
+    let newG = Game
+                { _song       = fall (_song g)
+                , _score      = _score g
+                , _lastHit    = newHit
+                , _done       = isEmptySong (_song g)
+                , _musicHandle = _musicHandle g
+                , _combo      = comboCounter (_combo g) StepEvent newHit
+                , _maxCombo   = _maxCombo g
+                , _lastHitCol = _lastHitCol g
+                } 
+    continue newG
 
 -- evaluate hit according to the height of the corresponding note
 evaluateHit :: Int -> (HitState, Int)
