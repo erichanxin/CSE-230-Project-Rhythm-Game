@@ -53,6 +53,7 @@ data Game = Game
   , _musicHandle :: ProcessHandle
   , _combo      :: Int
   , _maxCombo   :: Int
+  , _lastHitCol :: Int
   } 
 
 -- Functions
@@ -70,6 +71,7 @@ initGame = do
         , _musicHandle = initMusic
         , _combo = 0
         , _maxCombo = 0
+        , _lastHitCol = -1
         }
 
 -- load notes from noteLists.txt
@@ -105,6 +107,7 @@ step g = do
     , _musicHandle = _musicHandle g
     , _combo      = comboCounter (_combo g) StepEvent newHit
     , _maxCombo   = _maxCombo g
+    , _lastHitCol = _lastHitCol g
     } 
 
 -- evaluate hit according to the height of the corresponding note
@@ -130,6 +133,7 @@ hit k g = do
       , _musicHandle = _musicHandle g
       , _combo      = newCombo
       , _maxCombo   = max newCombo (_maxCombo g)
+      , _lastHitCol = keyToCol k
       }
 
 playMusic :: FilePath -> IO ProcessHandle

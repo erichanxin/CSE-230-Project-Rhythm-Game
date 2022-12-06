@@ -29,7 +29,7 @@ import qualified Data.Sequence as S
 -- marks passing of time
 data Tick = Tick
 
-data Col = FirstCol | SecondCol | ThirdCol | FourthCol | EmptyCol | Bottom
+data Col = FirstCol | SecondCol | ThirdCol | FourthCol | EmptyCol | Bottom | HitBottom
 
 
 -- define App
@@ -137,7 +137,7 @@ drawGrid g = withBorderStyle BS.unicodeBold
     rows         = [hBox $ cellsInRow r | r <- [39, 38..0]]
     cellsInRow y = [(drawCoord x y) | x <- [0..40]]
     drawCoord x y
-        | y == 1                      = drawCell Bottom
+        | y == 1                      = if (x `div` 10) == (_lastHitCol g) then drawCell HitBottom else drawCell Bottom
         | x >= 1 && x < 9 && y `elem` (_song g)!!0       = drawCell FirstCol
         | x >= 11 && x < 19 && y `elem` (_song g)!!1     = drawCell SecondCol
         | x >= 21 && x < 29 && y `elem` (_song g)!!2     = drawCell ThirdCol
@@ -151,12 +151,16 @@ drawCell ThirdCol = withAttr thirdAttr cw
 drawCell FourthCol = withAttr fourthAttr cw
 drawCell EmptyCol = withAttr emptyAttr cw
 drawCell Bottom = withAttr bottomAttr cwBottom
+drawCell HitBottom = withAttr hitBottomAttr cwHitBottom
 
 cw :: Widget Name
 cw = str "  "
 
 cwBottom :: Widget Name
 cwBottom = str "--"
+
+cwHitBottom :: Widget Name
+cwHitBottom = str "||"
 
 theMap :: AttrMap
 theMap = attrMap V.defAttr
@@ -165,6 +169,7 @@ theMap = attrMap V.defAttr
   , (thirdAttr, V.green `on` V.green)
   , (fourthAttr, V.yellow `on` V.yellow)
   , (bottomAttr, V.cyan `on` V.black)
+  , (hitBottomAttr, V.brightCyan `on` V.black)
   ]
 
 firstAttr, secondAttr, thirdAttr, fourthAttr :: AttrName
@@ -174,4 +179,5 @@ thirdAttr = attrName "thirdAttr"
 fourthAttr = attrName "fourthAttr"
 emptyAttr = attrName "emptyAttr"
 bottomAttr = attrName "bottomAttr"
+hitBottomAttr = attrName "hitBottomAttr"
 
