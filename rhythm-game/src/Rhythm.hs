@@ -21,6 +21,7 @@ import System.Info
 import System.Directory
 import System.IO
 import System.FilePath.Windows (FilePath)
+
 --- Game definitions: --
 
 type Name = ()

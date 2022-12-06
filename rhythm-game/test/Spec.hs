@@ -16,3 +16,7 @@ main = do
     quickCheck prop_fall_one_unit
     putStrLn "Test prop_evaluate_hit"
     quickCheck prop_evaluate_hit
+    putStrLn "Test prop_combo_counter_step"
+    quickCheck prop_combo_counter_step
+    putStrLn "Test prop_combo_counter_hit"
+    quickCheck prop_combo_counter_hit

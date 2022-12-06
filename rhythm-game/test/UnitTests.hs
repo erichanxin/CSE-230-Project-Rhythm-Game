@@ -3,6 +3,11 @@ import Test.QuickCheck
 
 import Rhythm
 
+instance Arbitrary HitState where
+  arbitrary = do
+    x <- elements [Perfect, Good, Miss, Empty]
+    return x
+
 quickCheckN n = quickCheckWith (stdArgs {maxSuccess = n})
 -- >>> quickCheckN 10000 prop_is_empty_song
 -- +++ OK, passed 10000 tests.
@@ -28,6 +33,16 @@ prop_evaluate_hit h = case evaluateHit h of
     (Good, 3)       -> h /= 1 && h <= 5
     (Perfect, 5)    -> h == 1
 
+prop_combo_counter_step :: Int -> HitState -> Bool
+prop_combo_counter_step c hs = case comboCounter c StepEvent hs of
+    0       -> hs == Miss || c == 0
+    newC    -> newC == c
+
+prop_combo_counter_hit :: Int -> HitState -> Bool
+prop_combo_counter_hit c hs = case comboCounter c HitEvent hs of
+    0       -> hs == Miss || (hs /= Miss && c == -1)
+    newC    -> newC == c+1
+
 -- >>> quickCheck prop_is_empty_song
 -- +++ OK, passed 100 tests.
 
@@ -45,3 +60,9 @@ prop_evaluate_hit h = case evaluateHit h of
 
 -- >>> quickCheckN 1000 prop_fall_size
 -- *** Gave up! Passed only 193 tests; 10000 discarded tests.
+
+-- >>> quickCheck prop_combo_counter_step
+-- +++ OK, passed 100 tests.
+
+-- >>> quickCheck prop_combo_counter_hit
+-- +++ OK, passed 100 tests.
