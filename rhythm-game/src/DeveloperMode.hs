@@ -1,3 +1,13 @@
+-- Functions for Developer mode:
+
+-- initDeveloper: Initialize the developer mode, 
+-- create a notelist to store the notes and a clock to record the time
+
+-- step: the clock setting function
+
+-- Hit: Upon each key-press event, the hit function is triggered and it adds
+-- the current clock tick to the note list that corresponds to the key
+
 module DeveloperMode where
 import Brick
   ( App(..), AttrMap, BrickEvent(..), EventM, Next, Widget

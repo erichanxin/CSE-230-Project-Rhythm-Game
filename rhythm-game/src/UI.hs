@@ -1,3 +1,4 @@
+-- UI construction of Game mode
 module UI where
 
 import Rhythm
