@@ -1,3 +1,5 @@
+-- Functions for main menu UI and handleEvent
+-- With "1" for game mode, "2" for developer mode, and "q" for quit  
 module ChooseMode where
 
 import System.Exit (exitSuccess)

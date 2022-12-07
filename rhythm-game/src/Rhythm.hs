@@ -1,3 +1,5 @@
+-- Functions for game mode:
+
 module Rhythm where
 import Brick
   ( App(..), AttrMap, BrickEvent(..), EventM, Next, Widget
@@ -141,6 +143,7 @@ hit k g = do
       , _lastHitCol = keyToCol k
       }
 
+-- The method that music plays depends on the platform you use
 playMusic :: FilePath -> IO ProcessHandle
 playMusic path = withFile "/dev/null" WriteMode $ \hd_ -> do
   case os of "darwin" ->  do (_, _, _, processHandle) <- createProcess (proc "mpg321" [path]) {
